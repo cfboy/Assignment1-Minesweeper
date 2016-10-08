@@ -6,7 +6,7 @@ import java.awt.Color;
  import javax.swing.JPanel;
  
  public class MyPanel extends JPanel {
- 	
+ //	private Random generator = new Random();
  	//Decalracion de variables estaticas
  	private static final long serialVersionUID = 3426940946811133635L;
  	private static final int GRID_X = 25;
@@ -28,8 +28,8 @@ import java.awt.Color;
   	
   	public MyPanel() {   //This is the constructor... this code runs first to initialize
   		
- 	//exceptions si los parametros de tamaño no se cumplen
- 	//exceptions si los parametros de tamaño no se cumplen
+ 	//exceptions si los parametros de tamaï¿½o no se cumplen
+ 	//exceptions si los parametros de tamaï¿½o no se cumplen
   		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
   			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
   		}
@@ -111,13 +111,13 @@ import java.awt.Color;
  			}
  		}
  		if(mines!= TOTAL_MINES){
- 			randomSquare();
+ 			randomMines();
  		}
  		}while(mines!=TOTAL_MINES);
  	}
  	
  	//colors a random square in the grid black, equivalent to a mine
- 	public void randomSquare(){
+ 	public void randomMines(){
  		Random r = new Random();
  		int x = r.nextInt(TOTAL_COLUMNS);
  		int y = r.nextInt(TOTAL_ROWS);
@@ -128,7 +128,7 @@ import java.awt.Color;
  	//places 10 random mines 
  	public void tenMines(){
  		for(int i = 0; i<10; i++){
- 			randomSquare();
+ 			randomMines();
   		}
   	}
   
