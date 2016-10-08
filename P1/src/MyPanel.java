@@ -21,7 +21,7 @@ import java.awt.Color;
  	public int mouseDownGridX = 0;
  	public int mouseDownGridY = 0;
  	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS]; //array de dos dimensiones
- 	public Boolean[][] minesArray = new Boolean[TOTAL_COLUMNS][TOTAL_ROWS];
+ 	public int[][] minesArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
  	public String minesAtTime; 
  	public int mines = 0;
  	
@@ -105,7 +105,7 @@ import java.awt.Color;
  		do{
  		for (int i=0; i<TOTAL_COLUMNS; i++){
  			for (int j=0; j<TOTAL_ROWS; j++){
- 				if(minesArray[i][j]=true){
+ 				if(minesArray[i][j]==1){
  					mines++;
  				}
  			}
@@ -121,7 +121,7 @@ import java.awt.Color;
  		Random r = new Random();
  		int x = r.nextInt(TOTAL_COLUMNS);
  		int y = r.nextInt(TOTAL_ROWS);
- 		minesArray[x][y] = true;
+ 		minesArray[x][y] = 1;
  		//repaint();
  	}
  				
