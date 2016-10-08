@@ -7,8 +7,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 
-//Commit de prueba
-
 public class Minesweeper extends MouseAdapter {
 	//private Random generator = new Random();
 	public void mousePressed(MouseEvent e) {
@@ -69,8 +67,6 @@ public class Minesweeper extends MouseAdapter {
 		Color notMinesColor = Color.WHITE;
 		//Color para las Flags.
 		Color flagsColor = Color.RED;
-		
-		Color mines = Color.BLACK;
 		
 		int gridX = myPanel.getGridX(x, y);
 		int gridY = myPanel.getGridY(x, y);
