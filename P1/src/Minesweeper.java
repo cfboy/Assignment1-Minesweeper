@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 public class Minesweeper extends MouseAdapter
 {
-	private Random generator = new Random(); //Random object		
+	//private Random generator = new Random(); //Random object		
 		
 	
 	
