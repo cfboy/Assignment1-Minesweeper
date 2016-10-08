@@ -70,6 +70,9 @@ public class Minesweeper extends MouseAdapter {
 		//Color para las Flags.
 		Color flagsColor = Color.RED;
 		
+		
+		//TODO cuando se seleccione un cuadro con el valor
+		//de una mina, etonces que se pinte de negro
 		Color mines = Color.BLACK;
 		
 		int gridX = myPanel.getGridX(x, y);
