@@ -6,7 +6,7 @@ import java.awt.Color;
  import javax.swing.JPanel;
  
  public class MyPanel extends JPanel {
- 	private Random generator = new Random();
+ 	
  	//Decalracion de variables estaticas
  	private static final long serialVersionUID = 3426940946811133635L;
  	private static final int GRID_X = 25;
@@ -110,13 +110,13 @@ import java.awt.Color;
  			}
  		}
  		if(mines!= TOTAL_MINES){
- 			randomMines();
+ 			randomSquare();
  		}
  		}while(mines!=TOTAL_MINES);
  	}
  	
  	//colors a random square in the grid black, equivalent to a mine
- 	public void randomMines(){
+ 	public void randomSquare(){
  		Random r = new Random();
  		int x = r.nextInt(TOTAL_COLUMNS);
  		int y = r.nextInt(TOTAL_ROWS);
@@ -127,7 +127,7 @@ import java.awt.Color;
  	//places 10 random mines 
  	public void tenMines(){
  		for(int i = 0; i<10; i++){
- 			randomMines();
+ 			randomSquare();
   		}
   	}
   
