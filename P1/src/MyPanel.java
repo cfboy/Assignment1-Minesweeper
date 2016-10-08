@@ -67,6 +67,7 @@ import java.awt.Color;
  		g.setColor(new Color(0xF5F5DC));
  		g.fillRect(x1, y1, width + 1, height + 1);
  
+ 		
  		//Draw the grid minus the bottom row (which has only one cell)
  		//By default, the grid will be 10x10 (see above: TOTAL_COLUMNS and TOTAL_ROWS) 
  		g.setColor(Color.BLACK);
