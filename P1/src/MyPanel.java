@@ -16,12 +16,12 @@ import java.awt.Color;
  	private static final int TOTAL_ROWS = 9;   //Last row has only one cell
  	private static final int TOTAL_MINES =10; 
  	
- 	public int testVariable;
  	public int x = -1;
  	public int y = -1;
  	public int mouseDownGridX = 0;
  	public int mouseDownGridY = 0;
  	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS]; //array de dos dimensiones
+ 	public Boolean[][] minesArray = new Boolean[TOTAL_COLUMNS][TOTAL_ROWS];
  	public String minesAtTime; 
  	public int mines = 0;
  	
@@ -105,7 +105,7 @@ import java.awt.Color;
  		do{
  		for (int i=0; i<TOTAL_COLUMNS; i++){
  			for (int j=0; j<TOTAL_ROWS; j++){
- 				if(colorArray[i][j]==Color.BLACK){
+ 				if(minesArray[i][j]=true){
  					mines++;
  				}
  			}
@@ -121,7 +121,7 @@ import java.awt.Color;
  		Random r = new Random();
  		int x = r.nextInt(TOTAL_COLUMNS);
  		int y = r.nextInt(TOTAL_ROWS);
- 		colorArray[x][y] = Color.black;
+ 		minesArray[x][y] = true;
  		//repaint();
  	}
  				
