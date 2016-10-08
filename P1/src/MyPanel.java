@@ -16,6 +16,7 @@ import java.awt.Color;
  	private static final int TOTAL_ROWS = 9;   //Last row has only one cell
  	private static final int TOTAL_MINES =10; 
  	
+ 	public int testVariable;
  	public int x = -1;
  	public int y = -1;
  	public int mouseDownGridX = 0;
