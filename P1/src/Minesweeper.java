@@ -135,11 +135,8 @@ public class Minesweeper extends MouseAdapter {
 							//Si ese grid es color gris entonces poner el flag
 							if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == quitFlags){
 								myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = flagsColor;
-								//myPanel.minesAtTime = "" myPanel.minesAtTime;
-								myPanel.repaint();
 								
-						   		
-							
+								myPanel.repaint();						  
 							}
 							else{
 								//si ese grid tiene un flag entonces puedes quitarla
