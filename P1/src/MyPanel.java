@@ -24,12 +24,14 @@ import java.awt.Color;
  	public int[][] minesArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
    	public String minesAtTime; 
    	public int mines = 0;
+   	Minesweeper m = new Minesweeper(); //variable tipo minesweeper parapode rutilizar el valor dela variable minesAtTime
+   										//que se manipulo en la clase  Minesweeper
   
    
    	public MyPanel() {   //This is the constructor... this code runs first to initialize
    		
-  	//exceptions si los parametros de tama�o no se cumplen
-  	//exceptions si los parametros de tama�o no se cumplen
+  	//exceptions si los parametros de tama-o no se cumplen
+  	//exceptions si los parametros de tama-o no se cumplen
    		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
    			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
    		}
@@ -72,7 +74,7 @@ import java.awt.Color;
   		//Draw the grid minus the bottom row (which has only one cell)
   		//By default, the grid will be 10x10 (see above: TOTAL_COLUMNS and TOTAL_ROWS) 
   		g.setColor(Color.BLACK);
-  		//dibujar las lineas que dividen cada recuadro del grid 10x10
+  		//dibujar las lineas que dividen cada recuadro del grid 9x9
   		for (int y = 0; y <= TOTAL_ROWS ; y++) {
   			g.drawLine(x1 + GRID_X, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)), x1 + GRID_X + ((INNER_CELL_SIZE + 1) * TOTAL_COLUMNS), y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)));
   		}//lineas horizontales
@@ -80,8 +82,8 @@ import java.awt.Color;
   			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y , x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS )));
   		}//lineas verticales
    		
-   		minesAtTime = "" + TOTAL_MINES;
-   		g.drawString("Remaining mines:"+minesAtTime, x1+200, y1+20);
+   		minesAtTime = m.minesAtTime + "";
+   		g.drawString("Remaining mines:"+ minesAtTime, x1+200, y1+20);
  			
    		//Paint cell colors
    		for (int x = 0; x < TOTAL_COLUMNS; x++) {
@@ -180,4 +182,4 @@ import java.awt.Color;
    		}
    		return y;
    	}
- } 
+ }
