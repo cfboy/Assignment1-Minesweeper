@@ -50,6 +50,7 @@ import java.awt.Color;
  		minesGenerator();
  	}
  	
+  	
  	public void paintComponent(Graphics g) {
  		super.paintComponent(g);
  
