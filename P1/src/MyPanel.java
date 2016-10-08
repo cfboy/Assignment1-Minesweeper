@@ -27,7 +27,7 @@ public class MyPanel extends JPanel {
 	
 	public MyPanel() {   //This is the constructor... this code runs first to initialize
 		
-		//exceptions si los parametros de tamaño no se cumplen
+		//exceptions si los parametros de tamaÃ±o no se cumplen
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
 			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
 		}
@@ -78,12 +78,7 @@ public class MyPanel extends JPanel {
 		
 		minesAtTime = "" + TOTAL_MINES;
 		g.drawString("Remaining mines:"+minesAtTime, x1+200, y1+20);
-		
-
-		
-		
-		
-		
+			
 		//Paint cell colors
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS; y++) {
@@ -133,20 +128,6 @@ public class MyPanel extends JPanel {
 		}
 	}
 
-						
-
-	//metodo de prueba sin terminar
-	public void numbersGenerator(){
-		for(int i = 0; i<TOTAL_COLUMNS;i++){
-			for(int j = 0; j< TOTAL_ROWS;j++){
-				if(colorArray[i][j]==Color.black){
-					
-				}
-				
-			}
-		}
-	}
-	
 	
 	public int getGridX(int x, int y) {
 		Insets myInsets = getInsets();
