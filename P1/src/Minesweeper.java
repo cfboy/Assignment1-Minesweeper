@@ -10,7 +10,11 @@ import javax.swing.JOptionPane;
 public class Minesweeper extends MouseAdapter {
 	//private Random generator = new Random();
 	public int minesAtTime = 10;    //variable para contar las bombas
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> refs/remotes/origin/master
 	public void mousePressed(MouseEvent e) {
 		Component c = e.getComponent();
 		while (!(c instanceof JFrame)) {
@@ -70,9 +74,16 @@ public class Minesweeper extends MouseAdapter {
 		//TODO cuando se seleccione un cuadro con el valor
 		//de una mina, etonces que se pinte de negro
 		Color minesColor = Color.BLACK;
+<<<<<<< HEAD
 		Color quitFlagsColor = Color.lightGray;
 		int mines = myPanel.mines;
 		
+=======
+		Color quitFlags = Color.lightGray;
+		int mines = myPanel.mines;
+		
+
+>>>>>>> refs/remotes/origin/master
 		int gridX = myPanel.getGridX(x, y);
 		int gridY = myPanel.getGridY(x, y);
 
@@ -133,16 +144,30 @@ public class Minesweeper extends MouseAdapter {
 								this.minesAtTime--;
 								myPanel.minesAtTime = this.minesAtTime + "";
 								myPanel.repaint();	
+<<<<<<< HEAD
+=======
+								
+											  
+>>>>>>> refs/remotes/origin/master
 							}
 							else{
 								//si ese grid tiene un flag entonces puedes quitarla
 								if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == flagsColor){
+<<<<<<< HEAD
 									myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = quitFlagsColor;
 									this.minesAtTime++;
 									myPanel.minesAtTime = this.minesAtTime + ""; 
 									myPanel.repaint();
+=======
+								myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = quitFlags;
+								this.minesAtTime++;
+								myPanel.minesAtTime = this.minesAtTime + ""; 
+								myPanel.repaint();
+								
+>>>>>>> refs/remotes/origin/master
 								}
 							}
+								
 						}
 					}
 				}
@@ -153,4 +178,8 @@ public class Minesweeper extends MouseAdapter {
 			break;
 		}
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/master
 }
