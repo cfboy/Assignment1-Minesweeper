@@ -70,7 +70,7 @@ public class Minesweeper extends MouseAdapter {
 		Color minesColor = Color.BLACK;
 		Color quitFlagsColor = Color.WHITE;
 		int mines = myPanel.mines;
-		
+
 		int gridX = myPanel.getGridX(x, y);
 		int gridY = myPanel.getGridY(x, y);
 
@@ -92,29 +92,92 @@ public class Minesweeper extends MouseAdapter {
 						if (myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == flagsColor){
 							// Do nothing
 						}else{
-						
+
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = notMinesColor;
 							myPanel.repaint();
 						}
-							//Cuando se haga click en un grid que tenga una mina
-						if (myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== 1){
-							// Si el grid tiene un flag, no hace nada.
-							if (myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== flagsColor){
-							//do Nothing
+						if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == quitFlagsColor && 
+								myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] != myPanel.isMine){
+//							if(myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == myPanel.hasNumber){
+//								myPanel.repaint();
+//							}
+//							else{
+//								do {
+//									for(int h = myPanel.mouseDownGridX; x <= myPanel.hasNumber; x++){
+//										for(int w = myPanel.mouseDownGridY; y<= myPanel.hasNumber; y++){
+//											//											int h = myPanel.mouseDownGridX;
+//											//											int w = myPanel.mouseDownGridY;
+//											if(myPanel.minesArray[h-1][w-1]!= myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//											if(myPanel.minesArray[h][w-1]!=myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//											if(myPanel.minesArray[h+1][w-1]!=myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//											if(myPanel.minesArray[h-1][w]!=myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//											if(myPanel.minesArray[h+1][w]!=myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//											if(myPanel.minesArray[h-1][w+1]!=myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//											if(myPanel.minesArray[h][w+1]!=myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//											if(myPanel.minesArray[h+1][w+1]!=myPanel.isMine){
+//												myPanel.colorArray[h][w] = notMinesColor;
+//												myPanel.repaint();
+//											}
+//
+//										
+//										}
+//									}
+//									
+//								} while(myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]!= myPanel.hasNumber);
+
 							}
-							//si el grid no tiene un flag, pierde el juego.
-							else{
-							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = minesColor;
-							JOptionPane.showMessageDialog(null, "You clicked on a bomb!", "YOU LOSE", JOptionPane.INFORMATION_MESSAGE);
-							System.exit(0);
+					
+							//Cuando se haga click en un grid que tenga una mina
+							if (myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== 1){
+								// Si el grid tiene un flag, no hace nada.
+								if (myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== flagsColor){
+									//do Nothing
+								}
+								//si el grid no tiene un flag, pierde el juego. 
+								//Pinta todas las bombas de negro
+								else{
+
+									for(int i = 0; i<9; i++){
+										for(int j = 0; j<9; j++){
+											if (myPanel.minesArray[i][j]== 1)
+												myPanel.colorArray[i][j] = minesColor;
+											if(myPanel.colorArray[i][j] == flagsColor)
+												myPanel.colorArray[i][j] = minesColor;
+
+										}
+									}
+									JOptionPane.showMessageDialog(null, "You clicked on a bomb!", "YOU LOSE", JOptionPane.INFORMATION_MESSAGE);
+									System.exit(0);
+								}
+
 							}
 
 						}
-						
 					}
-				}
+				
 			}
-			
+		
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button
@@ -130,7 +193,7 @@ public class Minesweeper extends MouseAdapter {
 				} else {
 					//Cuando haces click en un grid
 					if((myPanel.mouseDownGridX == gridX) && (myPanel.mouseDownGridY == gridY)){
-						//Si ese grid no ya lo clickeaste/no hay bomba (es gris) no se pone un flag
+						//Si ese grid ya lo clickeaste/no hay bomba (es gris) no se pone un flag
 						if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == notMinesColor){
 							//Do nothing
 						}

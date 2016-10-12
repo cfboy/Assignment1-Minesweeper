@@ -4,6 +4,7 @@ import java.awt.Insets;
 import java.util.Random;
 import javax.swing.JPanel;
 
+
 public class MyPanel extends JPanel {
 	//	private Random generator = new Random();
 	//Decalracion de variables estaticas
@@ -21,15 +22,12 @@ public class MyPanel extends JPanel {
 	public int mouseDownGridY = 0;
 	//declaradas para probar los numeros
 	public int amountOfNearMines = 0;
-	public Color[][] cells = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
-
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS]; //array de dos dimensiones
-
 	public int[][] minesArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
 	public String minesAtTime; 
 	public int mines = 0;
-	//public Color colorMines = Color.BLACK;
-	public int colorMines = 1;
+	public int isMine = 1;
+	public int hasNumber = 2;
 
 	Minesweeper m = new Minesweeper(); //variable tipo minesweeper parapode rutilizar el valor dela variable minesAtTime
 	//que se manipulo en la clase  Minesweeper
@@ -51,7 +49,7 @@ public class MyPanel extends JPanel {
 		}
 
 
-		//doble loop para pintar todos los cuadros color gris
+		//doble loop para pintar todos los cuadros color blanco
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {   //The rest of the grid
 			for (int y = 0; y < TOTAL_ROWS; y++) {
 				colorArray[x][y] = Color.WHITE;
@@ -60,7 +58,6 @@ public class MyPanel extends JPanel {
 
 		minesGenerator();
 	}
-
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -79,7 +76,7 @@ public class MyPanel extends JPanel {
 		//Paint the background
 		g.setColor(new Color(0xF5F5DC));
 		g.fillRect(x1, y1, width + 1, height + 1);
-
+		g.setColor(Color.BLACK);
 
 		//Draw the grid minus the bottom row (which has only one cell)
 		//By default, the grid will be 10x10 (see above: TOTAL_COLUMNS and TOTAL_ROWS) 
@@ -116,119 +113,105 @@ public class MyPanel extends JPanel {
 			for(int y=0; y<=8 ;y++){
 				//right top corner
 				if(x==0 && y==0){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x+1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y+1]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x+1][y]==isMine){adjacentMines++;}
+						if(minesArray[x][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
 					}
 				}
 				//left top corner
 				if(x==8 && y==0){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x-1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y+1]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x-1][y]==isMine){adjacentMines++;}
+						if(minesArray[x][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
 					}
 				}
 				// right bottom corner
 				if(x==0 && y==8){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y]==isMine){adjacentMines++;}
 					}
 				}
 				// left bottom corner
 				if(x==8 && y==8){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y-1]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
 					}
 				}
 				//center comparation
 				if((x>=1 && x<=7) && (y>=1 && y<=7)){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x-1][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y+1]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
 					}
 				}
 				//left column
 				if (x == 0 && (y>=1 && y<=7)){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x][y+1]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x][y+1]==isMine){adjacentMines++;}
 					}
 				}
 				//right column
 				if (x == 8 && (y>=1 && y<=7)){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x][y+1]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x][y+1]==isMine){adjacentMines++;}
 					}
 				}
 				//				//top row
 				if (y == 0 && (x>=1 && x<=7)){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x-1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y+1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x-1][y]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y]==isMine){adjacentMines++;}
 					}
 				}
 				//bottom row
 				if (y == 8 && (x>=1 && x<=7)){
-					if(minesArray[x][y]!=colorMines){
-						if(minesArray[x-1][y]==colorMines){adjacentMines++;}
-						if(minesArray[x-1][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y-1]==colorMines){adjacentMines++;}
-						if(minesArray[x+1][y]==colorMines){adjacentMines++;}
+					if(minesArray[x][y]!=isMine){
+						if(minesArray[x-1][y]==isMine){adjacentMines++;}
+						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
+						if(minesArray[x+1][y]==isMine){adjacentMines++;}
 					}
 				}
+
 				//Asignando los diferentes colores a la cantidad de minas adyacentes 
-				if(adjacentMines == 0) {
-					g.drawString("", x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);
-				}
-				if(adjacentMines == 1){g.setColor(Color.BLUE);
-				g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
 
-				if(adjacentMines == 2){g.setColor(Color.GREEN);
-				g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
-
-				if(adjacentMines == 3){g.setColor(Color.RED);
-				g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
-
-				if(adjacentMines == 4){g.setColor(Color.BLUE);
-				g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
-
-				if(adjacentMines == 5){g.setColor(Color.RED);
-				g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
-
-				if(adjacentMines == 6){g.setColor(Color.GREEN);
-				g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
-
-				if(adjacentMines == 7){g.setColor(Color.BLUE);
-				g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
-
-
+				if(adjacentMines == 1){g.setColor(Color.BLUE);}
+				if(adjacentMines == 2){g.setColor(Color.GREEN);}
+				if(adjacentMines == 3){g.setColor(Color.RED);}
+				if(adjacentMines == 4){g.setColor(Color.BLUE);}
+				if(adjacentMines == 5){g.setColor(Color.RED);}
+				if(adjacentMines == 6){g.setColor(Color.GREEN);}
+				if(adjacentMines == 7){g.setColor(Color.BLUE);}
+				if(adjacentMines>0){
+					minesArray[x][y] = hasNumber;
+					g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
 				adjacentMines = 0;	
-			}
+			}	
 		}
-
 	}
 
 	/*verifies that there are ten mines and the method 
@@ -240,9 +223,7 @@ public class MyPanel extends JPanel {
 			for (int x=0; x<TOTAL_COLUMNS; x++){
 				for (int y=0; y<TOTAL_ROWS; y++){
 					if(minesArray[x][y] == 1){
-						//					if(colorArray[x][y] == colorMines){
 						mines++;
-
 					}
 				}
 			}
@@ -316,5 +297,4 @@ public class MyPanel extends JPanel {
 		}
 		return y;
 	}
-
 }
