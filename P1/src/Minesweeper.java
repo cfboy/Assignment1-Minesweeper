@@ -3,14 +3,22 @@ import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class Minesweeper extends MouseAdapter {
-	//private Random generator = new Random();
-	public int minesAtTime = 10;    //variable para contar las bombas
+/**
+ * Class that receives mouse events and uses characteristics 
+ * of class MyPanel.
+ * @author Gladymar O'Neill Rivas
+ * @author Cristian F. Torres Collazo
+ *
+ */
 
+public class Minesweeper extends MouseAdapter {
+
+	/**
+	 * Actions to do when the mouse is pressed
+	 */
 	public void mousePressed(MouseEvent e) {
 		Component c = e.getComponent();
 		while (!(c instanceof JFrame)) {
@@ -29,24 +37,26 @@ public class Minesweeper extends MouseAdapter {
 		int y = e.getY();
 		myPanel.x = x;
 		myPanel.y = y;
+
 		switch (e.getButton()) {
 		case 1:		//Left mouse button
-
 			myPanel.mouseDownGridX = myPanel.getGridX(x, y);
 			myPanel.mouseDownGridY = myPanel.getGridY(x, y);
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button
-			//Do nothing
 			myPanel.mouseDownGridX = myPanel.getGridX(x, y);
 			myPanel.mouseDownGridY = myPanel.getGridY(x, y);
 			myPanel.repaint();
 			break;
-		default:    //Some other button (2 = Middle mouse button, etc.)
-			//Do nothing
+		default:    //Some other button, do nothing 
 			break;
 		}
 	}
+
+	/**
+	 * Actions to do when the mouse is released
+	 */
 	public void mouseReleased(MouseEvent e) {
 		Component c = e.getComponent();
 		while (!(c instanceof JFrame)) {
@@ -65,152 +75,122 @@ public class Minesweeper extends MouseAdapter {
 		int y = e.getY();
 		myPanel.x = x;
 		myPanel.y = y;
-		Color notMinesColor = Color.LIGHT_GRAY;
+		Color clickedCellColor = Color.LIGHT_GRAY;
 		Color flagsColor = Color.RED;
 		Color minesColor = Color.BLACK;
-		Color quitFlagsColor = Color.WHITE;
-		int mines = myPanel.mines;
-
+		Color originalCellColor = Color.WHITE;
 		int gridX = myPanel.getGridX(x, y);
 		int gridY = myPanel.getGridY(x, y);
 
 		switch (e.getButton()) {
 		case 1:		//Left mouse button
-
-			if ((myPanel.mouseDownGridX == -1) || (myPanel.mouseDownGridY == -1)) {
-				//Had pressed outside
-				//Do nothing
-			}else {
+			if ((myPanel.mouseDownGridX == -1) || (myPanel.mouseDownGridY == -1)) {//Had pressed outside the grid
+				if(e.getX()>=myPanel.resetButtonX && e.getX()<=myPanel.resetButtonX+46 
+					&& e.getY()>=myPanel.resetButtonY && e.getY()<=myPanel.resetButtonY+40){
+					//If has clicked on the smiley or it surrounding rectangle, restart the game
+						Main.restart();
+				}
+				else{
+					//do nothing
+				}
+			}
+			else { 
 				if ((gridX == -1) || (gridY == -1)) {
-					//Is releasing outside
-					//Do nothing
-				} else {
+					//Is releasing outside the grid, do nothing
+				} 
+				else { 
 					if ((myPanel.mouseDownGridX != gridX) || (myPanel.mouseDownGridY != gridY)) {
-
-					} else {
-						//if para que los flags no se eliminen con un left click
-						if (myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == flagsColor){
-							// Do nothing
-						}else{
-
-							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = notMinesColor;
-							myPanel.repaint();
-						}
-						if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == quitFlagsColor && 
-								myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] != myPanel.isMine){
-//							if(myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == myPanel.hasNumber){
-//								myPanel.repaint();
-//							}
-//							else{
-//								do {
-//									for(int h = myPanel.mouseDownGridX; x <= myPanel.hasNumber; x++){
-//										for(int w = myPanel.mouseDownGridY; y<= myPanel.hasNumber; y++){
-//											//											int h = myPanel.mouseDownGridX;
-//											//											int w = myPanel.mouseDownGridY;
-//											if(myPanel.minesArray[h-1][w-1]!= myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//											if(myPanel.minesArray[h][w-1]!=myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//											if(myPanel.minesArray[h+1][w-1]!=myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//											if(myPanel.minesArray[h-1][w]!=myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//											if(myPanel.minesArray[h+1][w]!=myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//											if(myPanel.minesArray[h-1][w+1]!=myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//											if(myPanel.minesArray[h][w+1]!=myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//											if(myPanel.minesArray[h+1][w+1]!=myPanel.isMine){
-//												myPanel.colorArray[h][w] = notMinesColor;
-//												myPanel.repaint();
-//											}
-//
-//										
-//										}
-//									}
-//									
-//								} while(myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]!= myPanel.hasNumber);
-
+						//Is releasing in a different cell that the one where mouse was pressed, nothing
+					} 
+					else { //releasing in the same cell
+						//If the clicked cell has a value of 1, equivalent to a mine
+						if (myPanel.valuesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== myPanel.isMine){
+							if (myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== flagsColor){
+								//If the grid has a flag, do nothing., mine has been checked and cannot make the user lose.
 							}
-					
-							//Cuando se haga click en un grid que tenga una mina
-							if (myPanel.minesArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== 1){
-								// Si el grid tiene un flag, no hace nada.
-								if (myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== flagsColor){
-									//do Nothing
-								}
-								//si el grid no tiene un flag, pierde el juego. 
-								//Pinta todas las bombas de negro
-								else{
-
-									for(int i = 0; i<9; i++){
-										for(int j = 0; j<9; j++){
-											if (myPanel.minesArray[i][j]== 1)
-												myPanel.colorArray[i][j] = minesColor;
-											if(myPanel.colorArray[i][j] == flagsColor)
-												myPanel.colorArray[i][j] = minesColor;
-
-										}
+							else{
+								//Lose the game and shows where all the mines where located.
+								for(int i = 0; i<MyPanel.getColumns(); i++){
+									for(int j = 0; j<MyPanel.getRows(); j++){
+										if (myPanel.valuesArray[i][j]== myPanel.isMine)
+											myPanel.colorArray[i][j] = minesColor;
+										if(myPanel.colorArray[i][j] == flagsColor)
+											myPanel.colorArray[i][j] = minesColor;
 									}
-									JOptionPane.showMessageDialog(null, "You clicked on a bomb!", "YOU LOSE", JOptionPane.INFORMATION_MESSAGE);
+								}
+								myPanel.repaint();
+								int lose = JOptionPane.showConfirmDialog(null, "YOU LOSE THE GAME \n NEW GAME?", "", JOptionPane.YES_NO_OPTION,
+										JOptionPane.INFORMATION_MESSAGE);
+								if( lose == JOptionPane.YES_NO_OPTION){
+									Main.restart();
+								}
+								if (lose == JOptionPane.NO_OPTION){
 									System.exit(0);
 								}
-
+							}
+						}
+						else{//Clicked cell does not have a value of 1 (is not a mine)
+							if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== clickedCellColor){
+								//If cell has already been clicked, do nothing
+							}
+							else if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]== flagsColor){
+								//If the cell has a flag, do nothing
+							}
+				
+							else{ //the cell is white
+								if(myPanel.hasNumber(myPanel.mouseDownGridX, myPanel.mouseDownGridY)){
+										myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = clickedCellColor;
+										myPanel.repaint();
+								}
+								else{ //Cell is not a mine, has 0 adjacent mines, is not a flag and is white
+									myPanel.noAdjacentMines(myPanel.mouseDownGridX, myPanel.mouseDownGridY);
+								}
 							}
 
+							if(myPanel.winGame()){
+								//Checks if the user have win the came 
+								int win = JOptionPane.showConfirmDialog(null, "YOU WIN! \n NEW GAME?", "Nice job", JOptionPane.YES_NO_OPTION,
+										JOptionPane.INFORMATION_MESSAGE);
+								if( win == JOptionPane.YES_NO_OPTION){
+									Main.restart();
+								}
+								if (win == JOptionPane.NO_OPTION){
+									System.exit(0);
+								}
+							}
 						}
 					}
-				
+				}
 			}
-		
+					
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button
-			// FLAGS
-			//TODO
 			if ((myPanel.mouseDownGridX == -1) || (myPanel.mouseDownGridY == -1)) {
-				//Had pressed outside
-				//Do nothing
-			} else {
+				//Had pressed outside, do nothing
+			} 
+			else {
 				if ((gridX == -1) || (gridY == -1)) {
-					//Is releasing outside
-					//Do nothing
-				} else {
-					//Cuando haces click en un grid
+					//Is releasing outside, do nothing
+				} 
+				else {
 					if((myPanel.mouseDownGridX == gridX) && (myPanel.mouseDownGridY == gridY)){
-						//Si ese grid ya lo clickeaste/no hay bomba (es gris) no se pone un flag
-						if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == notMinesColor){
-							//Do nothing
+						if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == clickedCellColor){
+							//If cell has already been clicked with left mouse button, do nothing
 						}
 						else {  
-							//Si ese grid no lo has clickeado (blanco) entonces puedes poner un flag
-							if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == quitFlagsColor){
+							//To put a flag with a right click
+							if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == originalCellColor){
+								//If cell is still white, user choose to put a flag. 
 								myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = flagsColor;
-								this.minesAtTime--;
-								myPanel.minesAtTime = this.minesAtTime + "";
+								myPanel.remainingMines--;
 								myPanel.repaint();	
 							}
 							else{
-								//si ese grid tiene un flag entonces puedes quitarla
 								if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == flagsColor){
-									myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = quitFlagsColor;
-									this.minesAtTime++;
-									myPanel.minesAtTime = this.minesAtTime + ""; 
+									//If cell has a flag, user can undo it.
+									myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = originalCellColor;
+									myPanel.remainingMines++;
 									myPanel.repaint();
 								}
 							}
@@ -219,8 +199,7 @@ public class Minesweeper extends MouseAdapter {
 				}
 			}
 
-		default:    //Some other button (2 = Middle mouse button, etc.)
-			//Do nothing
+		default: //Some other button, do nothing
 			break;
 		}
 	}

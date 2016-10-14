@@ -1,43 +1,41 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.util.Random;
 import javax.swing.JPanel;
-
+/** Class to create all components of a JPanel
+ * 
+ * @author Gladymar O'Neill Rivas
+ * @author Cristian F. Torres Collazo 
+ * 
+ */
 
 public class MyPanel extends JPanel {
-	//	private Random generator = new Random();
-	//Decalracion de variables estaticas
 	private static final long serialVersionUID = 3426940946811133635L;
-	private static final int GRID_X = 25;
-	private static final int GRID_Y = 25;
+	private static final int GRID_X = 40;
+	private static final int GRID_Y = 45;
 	private static final int INNER_CELL_SIZE = 29;
 	private static final int TOTAL_COLUMNS = 9;
-	private static final int TOTAL_ROWS = 9;   //Last row has only one cell
-	private static final int TOTAL_MINES =10; 
+	public static final int TOTAL_ROWS = 9;  
+	public static final int TOTAL_MINES =10; 
 
 	public int x = -1;
 	public int y = -1;
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
-	//declaradas para probar los numeros
-	public int amountOfNearMines = 0;
-	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS]; //array de dos dimensiones
-	public int[][] minesArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
-	public String minesAtTime; 
-	public int mines = 0;
-	public int isMine = 1;
-	public int hasNumber = 2;
+	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS]; 
+	public int[][] valuesArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
+	public int isMine = 1; //assigns 1 to a cell that is mine 
+	public int remainingMines=10; //Initial counter of flags that can be used in the game.
+	public int resetButtonX = 140; // x coordinate of where the smiley face is being drawn
+	public int resetButtonY= 8; // y coordinate of where the smiley face is being drawn
+	/**
+	 * Constructor: As the object is created, it paints all cells if the grid white
+	 * and generates the total number of random mines.
+	 */
+	public MyPanel() {  
 
-	Minesweeper m = new Minesweeper(); //variable tipo minesweeper parapode rutilizar el valor dela variable minesAtTime
-	//que se manipulo en la clase  Minesweeper
-	public int adjacentMines = 0;
-	int i, j; //variables para los loops de center grid
-
-	public MyPanel() {   //This is the constructor... this code runs first to initialize
-
-		//exceptions si los parametros de tama-o no se cumplen
-		//exceptions si los parametros de tama-o no se cumplen
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
 			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
 		}
@@ -48,21 +46,21 @@ public class MyPanel extends JPanel {
 			throw new RuntimeException("TOTAL_ROWS must be at least 3!");
 		}
 
-
-		//doble loop para pintar todos los cuadros color blanco
-		for (int x = 0; x < TOTAL_COLUMNS; x++) {   //The rest of the grid
+		//Paints every cell of the grid color White
+		for (int x = 0; x < TOTAL_COLUMNS; x++) {   
 			for (int y = 0; y < TOTAL_ROWS; y++) {
 				colorArray[x][y] = Color.WHITE;
 			}
 		}
-
-		minesGenerator();
+		mines();
 	}
 
+	/**
+	 * Method to add graphics and colors to the JPanel
+	 * 
+	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
-
 
 		//Compute interior coordinates
 		Insets myInsets = getInsets();
@@ -74,22 +72,48 @@ public class MyPanel extends JPanel {
 		int height = y2 - y1;
 
 		//Paint the background
-		g.setColor(new Color(0xF5F5DC));
+		g.setColor(new Color(0x7CB9E8));
 		g.fillRect(x1, y1, width + 1, height + 1);
+	
+		//Paint rectangle on top of the grid
 		g.setColor(Color.BLACK);
-
-		//Draw the grid minus the bottom row (which has only one cell)
-		//By default, the grid will be 10x10 (see above: TOTAL_COLUMNS and TOTAL_ROWS) 
-		//g.setColor(colorMines);
-		//dibujar las lineas que dividen cada recuadro del grid 9x9
+		g.drawRect(GRID_X,8, 30*9,GRID_Y);
+		g.setColor(new Color(0x848482)); // Battleship Grey https://en.wikipedia.org/wiki/List_of_colors:_A–F
+		g.fillRect(GRID_X,8, 30*9,GRID_Y);
+		g.setColor(Color.BLACK);
+		g.drawRect(GRID_X+100 ,8,46 ,GRID_Y);
+		g.setColor(Color.GRAY);
+		g.fillRect(GRID_X+100 ,8,46 ,GRID_Y);
+		
+		// Draw a Smiley Face
+		g.setColor(Color.BLACK);
+		g.drawOval(148, 10, 30, 30);
+		g.setColor(Color.YELLOW);
+		g.fillOval(148, 10, 30, 30);
+		g.setColor(Color.BLACK);
+		g.fillOval(152, 16, 9, 9);
+		g.fillOval(164, 16, 9,9);
+		g.drawArc(153, 24, 20, 10, 180, 180); 
+		
+		// Rectangle to separate the string "Mines:"
+		g.drawRect(GRID_X + 180 ,8, 90 ,GRID_Y-8);
+		g.setColor(Color.lightGray);
+		g.fillRect(GRID_X + 180 ,8, 90 ,GRID_Y-8);
+		
+		//Print the string corresponding to the remaining mines that have not been flagged. 
+		g.setColor(new Color(0xC40233)); //RED NCS https://en.wikipedia.org/wiki/Shades_of_red#Red_.28NCS.29_.28psychological_primary_red.29
+		g.setFont(new Font("Arial", Font.BOLD, 14));
+		g.drawString("Mines:"+ remainingMines, x1+236, y1+31);
+		
+		//Draw the lines that make the grid of the specified size (TOTAL_COLUMNSxTOTAL_ROWS)
+		g.setColor(Color.BLACK);
 		for (int y = 0; y <= TOTAL_ROWS ; y++) {
 			g.drawLine(x1 + GRID_X, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)), x1 + GRID_X + ((INNER_CELL_SIZE + 1) * TOTAL_COLUMNS), y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)));
-		}//lineas horizontales
+		}
 		for (int x = 0; x <= TOTAL_COLUMNS; x++) {
 			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y , x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS )));
-		}//lineas verticales
-
-
+		}
+	
 		//Paint cell colors
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS; y++) {
@@ -98,160 +122,127 @@ public class MyPanel extends JPanel {
 					g.setColor(c);
 					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
 
+					//Add a string equivalent to the number of adjacent mines if is greater than 0
+					if (colorArray[x][y].equals(Color.LIGHT_GRAY)) {
+						int adjacentMines = adjacentMinesCalculator(x, y);
+
+						if(adjacentMines == 1){g.setColor(Color.BLUE);}
+						if(adjacentMines == 2){g.setColor(new Color(0x00A550));} //Source:https://en.wikipedia.org/wiki/List_of_colors:_G%E2%80%93M
+						if(adjacentMines == 3){g.setColor(Color.RED);}
+						if(adjacentMines == 4){g.setColor(new Color(0x663854));} //Source:https://en.wikipedia.org/wiki/List_of_colors:_G%E2%80%93M
+						if(adjacentMines == 5){g.setColor(new Color(0x960018));} //Source:https://en.wikipedia.org/wiki/List_of_colors:_G%E2%80%93M
+						if(adjacentMines == 6){g.setColor(new Color(0x30BFBF));} //Source:https://en.wikipedia.org/wiki/List_of_colors:_G%E2%80%93M
+						if(adjacentMines == 7){g.setColor(new Color(0x343434));} //Source:https://en.wikipedia.org/wiki/List_of_colors:_G%E2%80%93M
+						if(adjacentMines>0){
+							g.drawString("" + adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 21);
+						}
+					}
 				}
 			}
 		}
-
-
-		minesAtTime = m.minesAtTime + "";
-		g.drawString("Remaining mines:"+ minesAtTime, x1+200, y1+20);
-
-		//draws the number of adjacent mines to the square specified
-		g.setColor(Color.BLUE);
-		//Todos los casos para imprimir la cantidad de minas adyacentes
-		for(int x=0;x<=8; x++){
-			for(int y=0; y<=8 ;y++){
-				//right top corner
-				if(x==0 && y==0){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x+1][y]==isMine){adjacentMines++;}
-						if(minesArray[x][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
-					}
-				}
-				//left top corner
-				if(x==8 && y==0){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x-1][y]==isMine){adjacentMines++;}
-						if(minesArray[x][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
-					}
-				}
-				// right bottom corner
-				if(x==0 && y==8){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y]==isMine){adjacentMines++;}
-					}
-				}
-				// left bottom corner
-				if(x==8 && y==8){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
-					}
-				}
-				//center comparation
-				if((x>=1 && x<=7) && (y>=1 && y<=7)){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
-					}
-				}
-				//left column
-				if (x == 0 && (y>=1 && y<=7)){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x][y+1]==isMine){adjacentMines++;}
-					}
-				}
-				//right column
-				if (x == 8 && (y>=1 && y<=7)){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x][y+1]==isMine){adjacentMines++;}
-					}
-				}
-				//				//top row
-				if (y == 0 && (x>=1 && x<=7)){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x-1][y]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y+1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y]==isMine){adjacentMines++;}
-					}
-				}
-				//bottom row
-				if (y == 8 && (x>=1 && x<=7)){
-					if(minesArray[x][y]!=isMine){
-						if(minesArray[x-1][y]==isMine){adjacentMines++;}
-						if(minesArray[x-1][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y-1]==isMine){adjacentMines++;}
-						if(minesArray[x+1][y]==isMine){adjacentMines++;}
-					}
-				}
-
-				//Asignando los diferentes colores a la cantidad de minas adyacentes 
-
-				if(adjacentMines == 1){g.setColor(Color.BLUE);}
-				if(adjacentMines == 2){g.setColor(Color.GREEN);}
-				if(adjacentMines == 3){g.setColor(Color.RED);}
-				if(adjacentMines == 4){g.setColor(Color.BLUE);}
-				if(adjacentMines == 5){g.setColor(Color.RED);}
-				if(adjacentMines == 6){g.setColor(Color.GREEN);}
-				if(adjacentMines == 7){g.setColor(Color.BLUE);}
-				if(adjacentMines>0){
-					minesArray[x][y] = hasNumber;
-					g.drawString(""+adjacentMines, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + +5 +GRID_Y + (y * (INNER_CELL_SIZE + 1)) +12);}
-				adjacentMines = 0;	
-			}	
-		}
 	}
 
-	/*verifies that there are ten mines and the method 
-	 * randomMines() did not repeat the same square in 
-	 * the grid*/
-	public void minesGenerator(){
-		tenMines();
-		do{
-			for (int x=0; x<TOTAL_COLUMNS; x++){
-				for (int y=0; y<TOTAL_ROWS; y++){
-					if(minesArray[x][y] == 1){
-						mines++;
-					}
-				}
-			}
-			if(mines!= TOTAL_MINES){
-				randomMines();
-			}
-		}while(mines!=TOTAL_MINES);
-	}
-
-	//colors a random square in the grid black, equivalent to a mine
+	/**Assigns the int value 1(equivalent to a mine)
+	 *  to a random cell of the array.
+	 */
 	public void randomMines(){
 		Random r = new Random();
 		int x = r.nextInt(TOTAL_COLUMNS);
 		int y = r.nextInt(TOTAL_ROWS);
-
-		//		colorArray[x][y] = colorMines;
-		minesArray[x][y] = 1;
-		//repaint();
+		valuesArray[x][y] = 1;
 	}
 
-	//places 10 random mines 
-	public void tenMines(){
-		for(int i = 0; i<10; i++){
+	/**Repeat the method randomMines() until there 
+	 * are total amount of mines wanted and no random 
+	 * number was repeated.
+	 */
+	public void mines(){
+		int mines=0;
+		for(int i=0; i<TOTAL_MINES; i++){
 			randomMines();
+		}
+		for(int m=0; m<TOTAL_COLUMNS; m++){
+			for(int n=0; n<TOTAL_ROWS; n++){
+				if(valuesArray[m][n]==isMine){mines++;}
+			}
+		}
+		while(mines!=TOTAL_MINES){
+			randomMines();
+			mines++;
+		}
+	}
+	
+	/** Method calculates how many mines are adjacent
+	 * to the cell[x][y] in the array. (Its surrounding
+	 * 8 squares)
+	 * 
+	 * @param x, x coordinate
+	 * @param y, ycoordinate
+	 * @return amount of adjacent mines to that cell
+	 */
+	public  int adjacentMinesCalculator(int x, int y) {		
+		int adjacentMines = 0;
+		for(int i = x-1; i <= x+1; i++) {
+			for(int j = y-1; j <= y+1; j++) {
+				if(i >=0 && i<TOTAL_COLUMNS && j>=0 && j <TOTAL_ROWS && valuesArray[i][j]==isMine) {
+					adjacentMines++;
+				}
+			}
+		}
+		return adjacentMines;
+	}
+
+	/**
+	 * Method verifies that the cell[x][y] of the array
+	 * has adjacent mines greater than 0. 
+	 * 
+	 * @param x, x coordinate
+	 * @param y, y coordinate
+	 * @return true or false
+	 */
+	public boolean hasNumber(int x, int y) {
+		return adjacentMinesCalculator(x,y)>0;
+	}
+
+	/**
+	 * Recursive method to check and clear every adjacent cell to 
+	 * the cell[x][y] that have adjacent mines = 0, until reaching 
+	 * a cell that has  a number of adjacent mines>0. 
+	 * @param x, x coordinate
+	 * @param y, y coordinate
+	 */
+	public void noAdjacentMines(int x, int y){
+		if(!hasNumber(x,y)){
+			for(int i=x-1; i<=x+1; i++){
+				for (int j=y-1; j<=y+1; j++){
+					if( !(i<0 || i>=TOTAL_COLUMNS || j<0 || j>=TOTAL_ROWS) &&
+							colorArray[i][j]==Color.WHITE){
+						colorArray[i][j]=Color.LIGHT_GRAY;
+						noAdjacentMines(i,j);
+					}
+				}
+			}
 		}
 	}
 
+	public static int getColumns(){
+		return TOTAL_COLUMNS;
+	}
 
+	public static int getRows(){
+		return TOTAL_ROWS;
+	}
+
+	public static int getNumberOfMines(){
+		return TOTAL_MINES;
+	}
+
+	/**
+	 * Method to get what column in the grid is being manipulated.
+	 * @param x
+	 * @param y 
+	 * @return the value of the column as an int
+	 */
 	public int getGridX(int x, int y) {
 		Insets myInsets = getInsets();
 		int x1 = myInsets.left;
@@ -269,12 +260,18 @@ public class MyPanel extends JPanel {
 		}
 		x = x / (INNER_CELL_SIZE + 1);
 		y = y / (INNER_CELL_SIZE + 1);
-		if (x < 0 || x > TOTAL_COLUMNS  || y < 0 || y > TOTAL_ROWS ) {   //Outside the rest of the grid
+		if (x < 0 || x > (TOTAL_COLUMNS-1)  || y < 0 || y > (TOTAL_ROWS-1) ) {   //Outside the rest of the grid
 			return -1;
 		}
 		return x;
 	}
 
+	/**
+	 * Method to get what row of the grid is being manipulated.
+	 * @param x
+	 * @param y
+	 * @return the value of the row as an int
+	 */
 	public int getGridY(int x, int y) {
 		Insets myInsets = getInsets();
 		int x1 = myInsets.left;
@@ -292,9 +289,47 @@ public class MyPanel extends JPanel {
 		}
 		x = x / (INNER_CELL_SIZE + 1);
 		y = y / (INNER_CELL_SIZE + 1);
-		if (x < 0 || x > TOTAL_COLUMNS  || y < 0 || y > TOTAL_ROWS ) {   //Outside the rest of the grid
+		if (x < 0 || x > (TOTAL_COLUMNS-1)  || y < 0 || y > (TOTAL_ROWS -1)) {   //Outside the rest of the grid
 			return -1;
 		}
 		return y;
+	}
+
+	/**
+	 * Method resets all the variables or methods in use to 
+	 * their initial value.
+	 */
+	public void resetGame(){
+		x = -1;
+		y = -1;
+		mouseDownGridX = 0;
+		mouseDownGridY = 0;
+		remainingMines=10;
+		colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS]; 
+		valuesArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
+		for (int x = 0; x < TOTAL_COLUMNS; x++) {   
+			for (int y = 0; y < TOTAL_ROWS; y++) {
+				colorArray[x][y] = Color.WHITE;
+			}
+		}
+		mines();
+	}
+
+	/**
+	 * Method calculates the amount of cells that have been cleared.
+	 * if it is equal to the total cells in the grid minus the mines,
+	 * the user wins the game. 
+	 * 
+	 * @return true or false
+	 */
+	public boolean winGame(){
+		int okCells=0; 
+		for (int i=0; i<TOTAL_COLUMNS; i++){
+			for(int j=0; j<TOTAL_ROWS; j++){
+				if(colorArray[i][j]==Color.LIGHT_GRAY){okCells++;} 
+			}
+		}
+		return okCells==(TOTAL_COLUMNS*TOTAL_ROWS -TOTAL_MINES);
+
 	}
 }
