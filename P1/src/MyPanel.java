@@ -74,37 +74,39 @@ public class MyPanel extends JPanel {
 		//Paint the background
 		g.setColor(new Color(0x7CB9E8));
 		g.fillRect(x1, y1, width + 1, height + 1);
-	
+
 		//Paint rectangle on top of the grid
 		g.setColor(Color.BLACK);
 		g.drawRect(GRID_X,8, 30*9,GRID_Y);
 		g.setColor(new Color(0x848482)); // Battleship Grey https://en.wikipedia.org/wiki/List_of_colors:_A–F
 		g.fillRect(GRID_X,8, 30*9,GRID_Y);
-		g.setColor(Color.BLACK);
-		g.drawRect(GRID_X+100 ,8,46 ,GRID_Y);
-		g.setColor(Color.GRAY);
-		g.fillRect(GRID_X+100 ,8,46 ,GRID_Y);
 		
-		// Draw a Smiley Face
+		//Rectangle for Smiley Face
 		g.setColor(Color.BLACK);
-		g.drawOval(148, 10, 30, 30);
+		g.drawRect(GRID_X+113 ,8,46 ,GRID_Y);
+		g.setColor(Color.lightGray);
+		g.fillRect(GRID_X+113 ,8,46 ,GRID_Y);
+
+		//Draw a Smiley Face
+		g.setColor(Color.BLACK);
+		g.drawOval(GRID_X+121, 10, 30, 30);
 		g.setColor(Color.YELLOW);
-		g.fillOval(148, 10, 30, 30);
+		g.fillOval(GRID_X+121, 10, 30, 30);
 		g.setColor(Color.BLACK);
-		g.fillOval(152, 16, 9, 9);
-		g.fillOval(164, 16, 9,9);
-		g.drawArc(153, 24, 20, 10, 180, 180); 
-		
+		g.fillOval(GRID_X+125, 16, 9, 9);
+		g.fillOval(GRID_X+137, 16, 9,9);
+		g.drawArc(GRID_X+126, 24, 20, 10, 180, 180); 
+
 		// Rectangle to separate the string "Mines:"
 		g.drawRect(GRID_X + 180 ,8, 90 ,GRID_Y-8);
-		g.setColor(Color.lightGray);
+		g.setColor(Color.DARK_GRAY);
 		g.fillRect(GRID_X + 180 ,8, 90 ,GRID_Y-8);
-		
+
 		//Print the string corresponding to the remaining mines that have not been flagged. 
 		g.setColor(new Color(0xC40233)); //RED NCS https://en.wikipedia.org/wiki/Shades_of_red#Red_.28NCS.29_.28psychological_primary_red.29
-		g.setFont(new Font("Arial", Font.BOLD, 14));
-		g.drawString("Mines:"+ remainingMines, x1+236, y1+31);
-		
+		g.setFont(new Font("Arial", Font.BOLD, 18));
+		g.drawString("Mines:"+ remainingMines, x1+225, y1+31);
+
 		//Draw the lines that make the grid of the specified size (TOTAL_COLUMNSxTOTAL_ROWS)
 		g.setColor(Color.BLACK);
 		for (int y = 0; y <= TOTAL_ROWS ; y++) {
@@ -113,7 +115,7 @@ public class MyPanel extends JPanel {
 		for (int x = 0; x <= TOTAL_COLUMNS; x++) {
 			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y , x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS )));
 		}
-	
+
 		//Paint cell colors
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS; y++) {
@@ -171,7 +173,7 @@ public class MyPanel extends JPanel {
 			mines++;
 		}
 	}
-	
+
 	/** Method calculates how many mines are adjacent
 	 * to the cell[x][y] in the array. (Its surrounding
 	 * 8 squares)

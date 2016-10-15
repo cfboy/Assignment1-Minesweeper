@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
  * @author Cristian F. Torres Collazo
  *
  */
-
 public class Minesweeper extends MouseAdapter {
 
 	/**
@@ -198,7 +197,6 @@ public class Minesweeper extends MouseAdapter {
 					}
 				}
 			}
-
 		default: //Some other button, do nothing
 			break;
 		}

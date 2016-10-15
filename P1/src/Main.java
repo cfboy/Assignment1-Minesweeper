@@ -18,7 +18,7 @@ public class Main {
 		
 		myFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		myFrame.setLocation(400, 150);
-		myFrame.setSize(350, 390);
+		myFrame.setSize(360, 410);
 		
 		//Information about the game to be shown to the user
 		JLabel instructions = new JLabel("NOTE: For new game, click on the smiley face"); 
